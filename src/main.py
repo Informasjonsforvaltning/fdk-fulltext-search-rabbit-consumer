@@ -4,8 +4,8 @@ import time
 from pika.adapters.utils.connection_workflow import AMQPConnectorSocketConnectError
 from pika.exceptions import AMQPChannelError, AMQPError, AMQPConnectionError
 
-from src.adapter import rabbit
-from src.config import LOGGING
+from adapter import rabbit
+from config import LOGGING
 
 if __name__ == '__main__':
     logging.basicConfig(level=LOGGING.get('LEVEL'))
