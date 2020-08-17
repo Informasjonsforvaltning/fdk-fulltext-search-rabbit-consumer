@@ -4,7 +4,7 @@ from json.decoder import JSONDecodeError
 import pika
 import requests
 
-from src.config import RABBITMQ, FULLTEXT_SEARCH
+from config import RABBITMQ, FULLTEXT_SEARCH
 
 
 class Listener:
