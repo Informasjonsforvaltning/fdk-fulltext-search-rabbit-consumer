@@ -7,7 +7,8 @@ RABBITMQ = {
 }
 
 FULLTEXT_SEARCH = {
-    'BASE_URL': os.getenv('FDK_FULLTEXT_SEARCH_BASE_URL', 'http://localhost:5000')
+    'BASE_URL': os.getenv('FDK_FULLTEXT_SEARCH_BASE_URL', 'http://localhost:5000'),
+    'API_KEY': os.getenv('FDK_FULLTEXT_API_KEY', 'test-key')
 }
 
 LOGGING = {

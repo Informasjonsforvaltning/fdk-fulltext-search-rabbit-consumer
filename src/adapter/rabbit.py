@@ -64,7 +64,8 @@ class Listener:
             try:
                 response = requests.post(
                     url=fulltext_endpoint,
-                    params={'name': index}
+                    params={'name': index},
+                    headers={'X-API-KEY': FULLTEXT_SEARCH.get('API_KEY')}
                 )
                 response.raise_for_status()
                 logging.info(f"Successfully ingested {index}")
