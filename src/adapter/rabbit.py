@@ -1,5 +1,6 @@
 import logging
 from json.decoder import JSONDecodeError
+import traceback
 
 import pika
 import requests
@@ -74,6 +75,10 @@ class Listener:
                 logging.error(f"FDK Fulltext Search HTTP error: {e}")
 
         except KeyError:
-            logging.error(f"RabbitMQ: Received invalid operation type: {routing_key}")
+            logging.error(
+                f"RabbitMQ: Received invalid operation type: {traceback.format_exc()} {routing_key['message']}"
+            )
         except JSONDecodeError:
-            logging.error(f"RabbitMQ: Received invalid JSON:\n {body}")
+            logging.error(
+                f"RabbitMQ: Received invalid JSON:\n {traceback.format_exc()} {body['message']}"
+            )
