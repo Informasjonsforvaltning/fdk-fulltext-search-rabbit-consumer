@@ -16,7 +16,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=str(LOG_LEVEL.get('LEVEL')))
     logger = logging.getLogger()
 
-    logHandler = logging.StreamHandler(sys.stderr)
+    logHandler = logging.StreamHandler(sys.stdout)
     logHandler.setFormatter(StackdriverJsonFormatter())
     logger.addHandler(logHandler)
     listener = rabbit.Listener()
