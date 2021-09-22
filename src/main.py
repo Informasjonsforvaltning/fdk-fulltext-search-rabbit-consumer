@@ -13,13 +13,10 @@ import logging
 
 logger = logging.getLogger()
 
-logHandler = logging.StreamHandler(sys.stdout)
+logHandler = logging.StreamHandler(sys.stderr)
 logHandler.setFormatter(StackdriverJsonFormatter())
 logger.addHandler(logHandler)
 
-for handler in logger.handlers:
-    logger.removeHandler(handler)
-logger.addHandler(logHandler)
 
 if __name__ == '__main__':
     logging.basicConfig(level=str(LOG_LEVEL.get('LEVEL')))

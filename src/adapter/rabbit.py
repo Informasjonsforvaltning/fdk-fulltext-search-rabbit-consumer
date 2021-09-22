@@ -1,23 +1,11 @@
 import logging
-import sys
 from json.decoder import JSONDecodeError
 import traceback
-from config import StackdriverJsonFormatter
 
 import pika
 import requests
 
 from config import RABBITMQ, FULLTEXT_SEARCH
-
-logger = logging.getLogger()
-
-logHandler = logging.StreamHandler(sys.stdout)
-logHandler.setFormatter(StackdriverJsonFormatter())
-logger.addHandler(logHandler)
-
-for handler in logger.handlers:
-    logger.removeHandler(handler)
-logger.addHandler(logHandler)
 
 
 class Listener:
