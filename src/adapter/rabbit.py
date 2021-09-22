@@ -2,7 +2,7 @@ import logging
 import sys
 from json.decoder import JSONDecodeError
 import traceback
-from src.config import StackdriverJsonFormatter
+from config import StackdriverJsonFormatter
 
 import pika
 import requests
