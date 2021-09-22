@@ -1,5 +1,6 @@
 import time
 import traceback
+import sys
 
 from pika.adapters.utils.connection_workflow import AMQPConnectorSocketConnectError
 from pika.exceptions import AMQPChannelError, AMQPError, AMQPConnectionError
@@ -12,8 +13,12 @@ import logging
 
 logger = logging.getLogger()
 
-logHandler = logging.StreamHandler()
+logHandler = logging.StreamHandler(sys.stdout)
 logHandler.setFormatter(StackdriverJsonFormatter())
+logger.addHandler(logHandler)
+
+for handler in logger.handlers:
+    logger.removeHandler(handler)
 logger.addHandler(logHandler)
 
 if __name__ == '__main__':
