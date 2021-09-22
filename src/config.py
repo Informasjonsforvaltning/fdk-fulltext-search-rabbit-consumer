@@ -1,20 +1,20 @@
-import os
+from os import environ as env
 from pythonjsonlogger import jsonlogger
 from typing import Any, Dict
 
 RABBITMQ = {
-    'USERNAME': os.getenv("RABBIT_USERNAME", "admin"),
-    'PASSWORD': os.getenv("RABBIT_PASSWORD", "admin"),
-    'HOST': os.getenv("RABBIT_HOST", "localhost")
+    'USERNAME': env.get("RABBIT_USERNAME", "admin"),
+    'PASSWORD': env.get("RABBIT_PASSWORD", "admin"),
+    'HOST': env.get("RABBIT_HOST", "localhost")
 }
 
 FULLTEXT_SEARCH = {
-    'BASE_URL': os.getenv('FDK_FULLTEXT_SEARCH_BASE_URL', 'http://localhost:5000'),
-    'API_KEY': os.getenv('FDK_FULLTEXT_API_KEY', 'test-key')
+    'BASE_URL': env.get('FDK_FULLTEXT_SEARCH_BASE_URL', 'http://localhost:5000'),
+    'API_KEY': env.get('FDK_FULLTEXT_API_KEY', 'test-key')
 }
 
 LOGGING = {
-    'LEVEL': os.getenv('LOG_LEVEL', 'INFO')
+    'LEVEL': env.get('LOG_LEVEL', 'INFO')
 }
 
 
@@ -33,5 +33,5 @@ class StackdriverJsonFormatter(jsonlogger.JsonFormatter, object):
     def process_log_record(self: Any, log_record: Dict) -> Any:
         log_record["severity"] = log_record["levelname"]
         del log_record["levelname"]
-        log_record["serviceContext"] = {"service": "fdk-fulltext-search"}
+        log_record["serviceContext"] = {"service": "fdk-fulltext-search-rabbit-consumer"}
         return super(StackdriverJsonFormatter, self).process_log_record(log_record)

@@ -71,14 +71,14 @@ class Listener:
                 response.raise_for_status()
                 logging.info(f"Successfully ingested {index}")
 
-            except requests.HTTPError as e:
-                logging.error(f"FDK Fulltext Search HTTP error: {e}")
+            except requests.HTTPError:
+                logging.error(f"{traceback.format_exc()} FDK Fulltext Search HTTP error")
 
         except KeyError:
             logging.error(
-                f"RabbitMQ: Received invalid operation type: {traceback.format_exc()} {routing_key['message']}"
+                f"{traceback.format_exc()} RabbitMQ: Received invalid operation type:  {routing_key['message']}"
             )
         except JSONDecodeError:
             logging.error(
-                f"RabbitMQ: Received invalid JSON:\n {traceback.format_exc()} {body['message']}"
+                f"{traceback.format_exc()}RabbitMQ: Received invalid JSON:\n {body['message']}"
             )
