@@ -13,7 +13,7 @@ FULLTEXT_SEARCH = {
     'API_KEY': env.get('FDK_FULLTEXT_API_KEY', 'test-key')
 }
 
-LOGGING = {
+LOG_LEVEL = {
     'LEVEL': env.get('LOG_LEVEL', 'INFO')
 }
 

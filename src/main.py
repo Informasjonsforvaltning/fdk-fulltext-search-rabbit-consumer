@@ -5,7 +5,7 @@ from pika.adapters.utils.connection_workflow import AMQPConnectorSocketConnectEr
 from pika.exceptions import AMQPChannelError, AMQPError, AMQPConnectionError
 
 from adapter import rabbit
-from config import LOGGING
+from config import LOG_LEVEL
 from config import StackdriverJsonFormatter
 
 import logging
@@ -17,7 +17,7 @@ logHandler.setFormatter(StackdriverJsonFormatter())
 logger.addHandler(logHandler)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=LOGGING.get('LEVEL'))
+    logging.basicConfig(level=LOG_LEVEL.get('LEVEL'))
     listener = rabbit.Listener()
 
     while True:
