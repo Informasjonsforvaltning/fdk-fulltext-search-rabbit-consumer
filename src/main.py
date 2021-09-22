@@ -17,7 +17,7 @@ logHandler.setFormatter(StackdriverJsonFormatter())
 logger.addHandler(logHandler)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=LOGGING.get('LEVEL'),)
+    logging.basicConfig(level=LOGGING.get('LEVEL'))
     listener = rabbit.Listener()
 
     while True:
