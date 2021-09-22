@@ -13,7 +13,7 @@ import logging
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=str(LOG_LEVEL.get('LEVEL')))
+    # logging.basicConfig(level=str(LOG_LEVEL.get('LEVEL')))
     logger = logging.getLogger()
 
     logHandler = logging.StreamHandler(sys.stdout)
