@@ -10,6 +10,7 @@ flake8 = "*"
 [packages]
 pika = "*"
 requests = "*"
+python-json-logger = "*"
 
 [requires]
 python_version = "3.7"
