@@ -15,7 +15,7 @@ import logging
 if __name__ == '__main__':
     # logging.basicConfig(level=str(LOG_LEVEL.get('LEVEL')))
     logger = logging.getLogger()
-
+    logger.setLevel(str(LOG_LEVEL))
     logHandler = logging.StreamHandler(sys.stdout)
     logHandler.setFormatter(StackdriverJsonFormatter())
     logger.addHandler(logHandler)
