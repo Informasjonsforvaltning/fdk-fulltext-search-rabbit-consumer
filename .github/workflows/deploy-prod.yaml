@@ -26,9 +26,11 @@ jobs:
     - name: Build Docker image with latest tag
       run: docker build . -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:latest
 
-    - uses: actions/setup-python@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.7
+        python-version: 3.9
+
     - name: Run tests
       run: |
         python -m pip install --upgrade pip

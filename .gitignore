@@ -4,6 +4,7 @@
 .env
 *.log
 *.iml
+.python-version
 
 .pytest_cache
 
