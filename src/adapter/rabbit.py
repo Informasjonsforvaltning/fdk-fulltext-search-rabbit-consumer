@@ -66,7 +66,8 @@ class Listener:
                 response = requests.post(
                     url=fulltext_endpoint,
                     params={'name': index},
-                    headers={'X-API-KEY': FULLTEXT_SEARCH.get('API_KEY')}
+                    headers={'X-API-KEY': FULLTEXT_SEARCH.get('API_KEY')},
+                    timeout=1800
                 )
                 response.raise_for_status()
                 logging.info(f"Successfully ingested {index}")
@@ -82,3 +83,5 @@ class Listener:
             logging.error(
                 f"{traceback.format_exc()}RabbitMQ: Received invalid JSON:\n {body['message']}"
             )
+        except BaseException:
+            logging.error(traceback.format_exc())
