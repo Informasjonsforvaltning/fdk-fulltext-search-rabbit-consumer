@@ -11,7 +11,7 @@ from config import RABBITMQ, FULLTEXT_SEARCH
 class Listener:
     TYPE = 'topic'
     EXCHANGE = 'harvests'
-    ROUTING_KEY = '*.harvester.UpdateSearchTrigger'
+    ROUTING_KEY = '*.reasoned'
 
     def __init__(self):
         self._channel = None
