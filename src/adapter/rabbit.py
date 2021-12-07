@@ -2,10 +2,11 @@ import logging
 from json.decoder import JSONDecodeError
 import traceback
 
+import asyncio
 import pika
-import requests
 
-from config import RABBITMQ, FULLTEXT_SEARCH
+from config import RABBITMQ
+from .fulltext_ingest import ingest_for_index
 
 
 class Listener:
@@ -54,27 +55,11 @@ class Listener:
 
     @staticmethod
     def on_receive(ch, method, properties, body):
-        fulltext_endpoint = f"{FULLTEXT_SEARCH.get('BASE_URL')}/indices"
-
         routing_key = method.routing_key
-        logging.info(f"FROM: {routing_key}\nBody={body}")
         try:
-            index = routing_key.split('.')[0]
-            logging.info(f"RabbitMQ ingesting index \"{index}\" "
-                         f"into fulltext search: {fulltext_endpoint}")
-            try:
-                response = requests.post(
-                    url=fulltext_endpoint,
-                    params={'name': index},
-                    headers={'X-API-KEY': FULLTEXT_SEARCH.get('API_KEY')},
-                    timeout=1800
-                )
-                response.raise_for_status()
-                logging.info(f"Successfully ingested {index}")
-
-            except requests.HTTPError:
-                logging.error(f"{traceback.format_exc()} FDK Fulltext Search HTTP error")
-
+            logging.info(f"FROM: {routing_key}\nBody={body}")
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(ingest_for_index(routing_key.split('.')[0]))
         except KeyError:
             logging.error(
                 f"{traceback.format_exc()} RabbitMQ: Received invalid operation type:  {routing_key['message']}"
@@ -83,5 +68,3 @@ class Listener:
             logging.error(
                 f"{traceback.format_exc()}RabbitMQ: Received invalid JSON:\n {body['message']}"
             )
-        except BaseException:
-            logging.error(traceback.format_exc())
