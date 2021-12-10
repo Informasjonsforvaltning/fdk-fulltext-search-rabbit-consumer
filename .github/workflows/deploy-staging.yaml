@@ -26,8 +26,8 @@ jobs:
 
       - name: Build Docker image with GitHub commit sha tag and staging tag
         run: docker build . \
-        -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA \
-        -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:staging_latest
+          -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA \
+          -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:staging_latest
 
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer -a
