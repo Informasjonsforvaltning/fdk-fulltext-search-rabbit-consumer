@@ -24,9 +24,7 @@ jobs:
         run: gcloud auth configure-docker eu.gcr.io
 
       - name: Build Docker image with latest tag
-        run: docker build . \
-          -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA \
-          -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:latest
+        run: docker build . -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:latest
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
