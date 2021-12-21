@@ -13,49 +13,55 @@ jobs:
     if: github.event.pull_request.draft == false
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Auth gcloud CLI for image-store
-      uses: google-github-actions/auth@main
-      with:
-        credentials_json: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
+      - name: Auth gcloud CLI for image-store
+        uses: google-github-actions/auth@main
+        with:
+          credentials_json: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
-    - name: Configure docker to use the gcloud command-line tool as a credential helper
-      run: gcloud auth configure-docker eu.gcr.io
+      - name: Configure docker to use the gcloud command-line tool as a credential helper
+        run: gcloud auth configure-docker eu.gcr.io
 
-    - name: Build Docker image with GitHub commit sha tag and staging tag
-      run: docker build . -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:staging_latest
+      - name: Build Docker image with GitHub commit sha tag and staging tag
+        run: docker build . -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:staging_latest
 
-    - name: Publish docker image to Google Cloud
-      run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer -a
+      - name: Publish docker image to Google Cloud
+        run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer -a
 
-    - name: Apply Helm template
-      run: |
-        helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
-        helm fetch --untar --untardir ./helm fdk/fdk-fulltext-search-rabbit-consumer
-        helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA" \
-        -f ./helm/fdk-fulltext-search-rabbit-consumer/values/staging.yaml \
-        ./helm/fdk-fulltext-search-rabbit-consumer/ > ./kubectlapply.yaml
-        chmod o+w ./kubectlapply.yaml
-        cat kubectlapply.yaml
+      - name: Apply Helm template
+        run: |
+          helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
+          helm fetch --untar --untardir ./helm fdk/fdk-fulltext-search-rabbit-consumer
+          helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-fulltext-search-rabbit-consumer:$GITHUB_SHA" \
+          -f ./helm/fdk-fulltext-search-rabbit-consumer/values/staging.yaml \
+          ./helm/fdk-fulltext-search-rabbit-consumer/ > ./kubectlapply.yaml
+          chmod o+w ./kubectlapply.yaml
+          cat kubectlapply.yaml
 
-    - name: Auth gcloud CLI for deploy
-      uses: google-github-actions/auth@main
-      with:
-        credentials_json: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
+      - name: Auth gcloud CLI for deploy
+        uses: google-github-actions/auth@main
+        with:
+          credentials_json: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
 
-    - name: Deploy to GCP
-      run: |
-        gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
-        kubectl apply -f ./kubectlapply.yaml --force
+      - name: Deploy to GCP
+        run: |
+          gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
+          kubectl apply -f ./kubectlapply.yaml --force
+          if ! kubectl --namespace=staging rollout status deployment fdk-fulltext-search-rabbit-consumer; then
+          kubectl --namespace=staging rollout undo deployment fdk-fulltext-search-rabbit-consumer
+          kubectl --namespace=staging rollout status deployment fdk-fulltext-search-rabbit-consumer
+          exit 1
+          fi          
 
-    - name: Notify slack
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        author_name: 'Application: fdk-fulltext-search-rabbit-consumer | Environment: staging'
-        fields: commit,author,workflow
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: always()
+      - name: Notify slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: 'Application: fdk-fulltext-search-rabbit-consumer | Environment: staging'
+          fields: commit,author,workflow
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
