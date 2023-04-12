@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "fdk-fulltext-search-rabbit-consumer"
+description = "Rabbit consumer for fdk-fulltext-search"
+authors = ["Nils Ove Tendenes <nils.ove@tendenes.com>"]
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+python = ">3.8,<3.12"
+pika = "*"
+python-json-logger = "*"
+requests = "*"
+
+[tool.poetry.dev-dependencies]
+flake8 = "*"
+pytest = "*"

@@ -5,21 +5,24 @@ The fdk-fulltext-rabbit is a stand-alone RabbitMQ consumer for fdk-fulltext-sear
 ## Test the consumer locally
 
 ### Requirements
-- pipenv
+
+- poetry
 
 ### In your command line
+
 ```
-% pipenv shell
-% pipenv install
-% pipenv run python src/main.py
+% poetry install
+% poetry run python src/main.py
 ```
 
 ## Test the consumer in docker
 
 ### Requirements
+
 - docker
 
 ### In you command line
+
 ```
 % docker build . -t eu.gcr.io/fdk-infra/fdk-fulltext-rabbit:latest
 % docker run eu.gcr.io/fdk-infra/fdk-fulltext-rabbit:latest
@@ -28,10 +31,12 @@ The fdk-fulltext-rabbit is a stand-alone RabbitMQ consumer for fdk-fulltext-sear
 ## Test the consumer in docker-compose
 
 ### Requirements
+
 - docker
 - docker-compose
 
 ### In your command line
+
 ```
 % docker-compose up  --build
 ```
